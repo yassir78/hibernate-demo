@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import org.chaosmaker.helpers.EntityFactoryBuilder;
-import org.chaosmaker.models.Message;
+import org.chaosmaker.models.Item;
 
 /**
  * Hello world!
@@ -16,10 +16,7 @@ public class App {
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            // logic
-            Message message = new Message();
-            message.setText("test text 2");
-            em.persist(message);
+
             transaction.commit();
         } catch (Exception ex) {
             ex.printStackTrace();

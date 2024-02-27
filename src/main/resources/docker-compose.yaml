@@ -9,7 +9,7 @@ services:
     environment:
       MYSQL_USER: madara
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: shopix-store
+      MYSQL_DATABASE: auctionWave
       MYSQL_ROOT_PASSWORD: password
     volumes:
       - "shopix-store-vol:/var/lib/mysql"

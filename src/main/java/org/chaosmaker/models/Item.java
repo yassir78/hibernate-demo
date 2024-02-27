@@ -7,13 +7,10 @@ import jakarta.persistence.*;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom")
-    @TableGenerator(
+    @SequenceGenerator(
             name = "custom",
-            table = "GENERATOR_TABLE",
-            pkColumnName = "name",
-            pkColumnValue = "next",
-            valueColumnName = "item_test",
-            initialValue = 30
+            sequenceName = "GENERATOR_SEQUENCE",
+            initialValue = 15
     )
     private Long id;
     private String name;

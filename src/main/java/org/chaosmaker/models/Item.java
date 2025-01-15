@@ -1,6 +1,8 @@
 package org.chaosmaker.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +18,8 @@ When using LazyCollectionOption.EXTRA:
         name = "ITEM"
 )
 public class Item {
+    public static final String PROFILE_JOIN_SELLER = "JoinSeller";
+    public static final String PROFILE_JOIN_BIDS = "JoinBids";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom")
     @SequenceGenerator(
@@ -33,7 +37,21 @@ public class Item {
     @org.hibernate.annotations.LazyCollection(
             org.hibernate.annotations.LazyCollectionOption.EXTRA
     )
-    protected Set<Bid> bids = new HashSet<>();
+    protected Set<Bid> bids;
+
+
+    @ElementCollection
+    @CollectionTable(name = "IMAGE")
+    @Column(name = "FILENAME")
+    protected Set<String> images = new HashSet();
+
+    public Set<String> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<String> images) {
+        this.images = images;
+    }
 
     public User getSeller() {
         return seller;

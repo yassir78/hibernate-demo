@@ -8,6 +8,8 @@ import jakarta.persistence.*;
         uniqueConstraints =
         @UniqueConstraint(columnNames = "USERNAME")
 )
+// This setting tells Hibernate that it may load up to 10 User proxies if one has to be loaded
+@org.hibernate.annotations.BatchSize(size = 10)
 public class User {
 
     @Id

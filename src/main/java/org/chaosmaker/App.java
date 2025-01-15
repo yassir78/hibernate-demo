@@ -30,22 +30,18 @@ public class App {
         transaction.rollback();
         try {
             transaction.begin();
-
+            // uses the default profile
             Item item = em.find(Item.class, 15);
-            Set<Bid> bids = item.getBids();
-
-            // assertFalse(Hibernate.isInitialized(item.getSeller()));
-
-            // initializes the proxy's data.
-            // Hibernate.initialize(item);
-
-
-//            boolean isInPersistenceContext = em.contains(item);
-//
-//            Object identifier = persistenceUnitUtil.getIdentifier(item);
-//            System.out.printf("identifier %s", identifier);
-
-            transaction.commit();
+            System.out.println("*******************************************");
+            // enables the first profile fetch type
+            em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_SELLER);
+            item = em.find(Item.class, 15);
+            System.out.println("*******************************************");
+            em.clear();
+            System.out.println("*******************************************");
+            // enables the second profile fetch type
+            em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_BIDS);
+            item = em.find(Item.class, 15);
         } catch (Exception ex) {
             ex.printStackTrace();
             transaction.rollback();

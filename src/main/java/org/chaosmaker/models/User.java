@@ -20,6 +20,7 @@ public class User {
     private Long id;
     private String username;
 
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;

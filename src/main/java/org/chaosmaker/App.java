@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceUnitUtil;
+import jakarta.transaction.Transactional;
 import org.chaosmaker.helpers.EntityFactoryBuilder;
 import org.chaosmaker.models.Item;
 import org.hibernate.Hibernate;
@@ -24,12 +25,14 @@ public class App {
         EntityTransaction transaction = em.getTransaction();
         PersistenceUnitUtil persistenceUnitUtil = entityManagerFactory.getPersistenceUnitUtil();
 
+        transaction.rollback();
         try {
             transaction.begin();
 
             Item item = em.find(Item.class, 15);
 
-            System.out.println(em.contains(item));
+
+            // assertFalse(Hibernate.isInitialized(item.getSeller()));
 
             // initializes the proxy's data.
             // Hibernate.initialize(item);

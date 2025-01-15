@@ -6,6 +6,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceUnitUtil;
 import jakarta.transaction.Transactional;
 import org.chaosmaker.helpers.EntityFactoryBuilder;
+import org.chaosmaker.models.Bid;
 import org.chaosmaker.models.Item;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -14,6 +15,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Hello world!
@@ -30,7 +32,7 @@ public class App {
             transaction.begin();
 
             Item item = em.find(Item.class, 15);
-
+            Set<Bid> bids = item.getBids();
 
             // assertFalse(Hibernate.isInitialized(item.getSeller()));
 

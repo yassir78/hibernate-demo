@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/*
+When using LazyCollectionOption.EXTRA:
+** The collection is initially uninitialized.
+** Basic operations like size() and contains() can be performed without loading the entire collection5.
+** Elements are fetched individually from the database as needed, rather than loading the entire collection at once.
+ */
 @Entity
 @Table(
         name = "ITEM"

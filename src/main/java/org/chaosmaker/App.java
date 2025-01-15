@@ -1,19 +1,19 @@
 package org.chaosmaker;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.PersistenceUnitUtil;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.chaosmaker.helpers.EntityFactoryBuilder;
 import org.chaosmaker.models.Bid;
 import org.chaosmaker.models.Item;
+import org.chaosmaker.models.Item_;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,18 +30,12 @@ public class App {
         transaction.rollback();
         try {
             transaction.begin();
-            // uses the default profile
-            Item item = em.find(Item.class, 15);
-            System.out.println("*******************************************");
-            // enables the first profile fetch type
-            em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_SELLER);
-            item = em.find(Item.class, 15);
-            System.out.println("*******************************************");
-            em.clear();
-            System.out.println("*******************************************");
-            // enables the second profile fetch type
-            em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_BIDS);
-            item = em.find(Item.class, 15);
+            EntityGraph<Item> itemGraph = em.createEntityGraph(Item.class);
+            itemGraph.addAttributeNodes(Item_.seller);
+
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("javax.persistence.loadgraph", itemGraph);
+            Item item = em.find(Item.class, 15, properties);
         } catch (Exception ex) {
             ex.printStackTrace();
             transaction.rollback();

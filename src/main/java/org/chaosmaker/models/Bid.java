@@ -9,6 +9,26 @@ import java.math.BigDecimal;
 @Table(
         name = "BID"
 )
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "BidBidderItemSellerBids",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "bidder"),
+                        @NamedAttributeNode(
+                                value = "item",
+                                subgraph = "ItemSellerBids"
+                        )
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "ItemSellerBids",
+                                attributeNodes = {
+                                        @NamedAttributeNode("seller"),
+                                        @NamedAttributeNode("bids")
+                                })
+                }
+        )
+})
 public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_bid_generator")

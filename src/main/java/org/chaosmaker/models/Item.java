@@ -17,6 +17,15 @@ When using LazyCollectionOption.EXTRA:
 @Table(
         name = "ITEM"
 )
+// An entity graph is a declaration of entity nodes and attributes
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "ItemSeller",
+                attributeNodes = {
+                        @NamedAttributeNode("seller")
+                }
+        )
+})
 public class Item {
     public static final String PROFILE_JOIN_SELLER = "JoinSeller";
     public static final String PROFILE_JOIN_BIDS = "JoinBids";

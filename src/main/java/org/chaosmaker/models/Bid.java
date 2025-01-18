@@ -90,4 +90,23 @@ public class Bid {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+        if (!(other instanceof Bid)) return false;
+        Bid that = (Bid) other;
+        if (!this.getAmount().equals(that.getAmount()))
+            return false;
+        if (!this.getItem().getId().equals(that.getItem().getId()))
+            return false;
+        return true;
+    }
+    @Override
+    public int hashCode() {
+        int result = getAmount().hashCode();
+        result = 31 * result + getItem().getId().hashCode();
+        return result;
+    }
 }

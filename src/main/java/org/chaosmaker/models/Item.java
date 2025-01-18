@@ -1,6 +1,7 @@
 package org.chaosmaker.models;
 
 import jakarta.persistence.*;
+import org.chaosmaker.listeners.PersistEntityListener;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -26,6 +27,9 @@ When using LazyCollectionOption.EXTRA:
                 }
         )
 })
+@EntityListeners(
+        PersistEntityListener.class
+)
 public class Item {
     public static final String PROFILE_JOIN_SELLER = "JoinSeller";
     public static final String PROFILE_JOIN_BIDS = "JoinBids";
@@ -43,9 +47,6 @@ public class Item {
     @ManyToMany(mappedBy = "items")
     protected Set<Category> categories = new HashSet();
     @OneToMany(mappedBy = "item")
-    @org.hibernate.annotations.LazyCollection(
-            org.hibernate.annotations.LazyCollectionOption.EXTRA
-    )
     protected Set<Bid> bids;
 
 

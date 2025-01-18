@@ -1,21 +1,16 @@
 package org.chaosmaker;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.ParameterExpression;
+import jakarta.persistence.criteria.Root;
 import org.chaosmaker.helpers.EntityFactoryBuilder;
-import org.chaosmaker.models.Bid;
+import org.chaosmaker.interceptors.AuditLogInterceptor;
 import org.chaosmaker.models.Item;
-import org.chaosmaker.models.Item_;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Hello world!
@@ -23,19 +18,39 @@ import java.util.Set;
 public class App {
     public static void main(String[] args) {
         EntityManagerFactory entityManagerFactory = EntityFactoryBuilder.getEntityManagerFactory();
-        EntityManager em = entityManagerFactory.createEntityManager();
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(
+                org.hibernate.cfg.AvailableSettings.SESSION_SCOPED_INTERCEPTOR,
+                AuditLogInterceptor.class.getName()
+        );
+        EntityManager em = entityManagerFactory.createEntityManager(properties);
         EntityTransaction transaction = em.getTransaction();
-        PersistenceUnitUtil persistenceUnitUtil = entityManagerFactory.getPersistenceUnitUtil();
-
         transaction.rollback();
         try {
             transaction.begin();
-            EntityGraph<Item> itemGraph = em.createEntityGraph(Item.class);
-            itemGraph.addAttributeNodes(Item_.seller);
 
-            Map<String, Object> properties = new HashMap<>();
-            properties.put("javax.persistence.loadgraph", itemGraph);
-            Item item = em.find(Item.class, 15, properties);
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery criteria = cb.createQuery(Item.class);
+
+            ParameterExpression<String> itemNameParameter =
+                    cb.parameter(String.class);
+
+            Root<Item> i = criteria.from(Item.class);
+            Query query = em.createQuery(
+                    criteria.select(i).where(
+                            cb.equal(
+                                    i.get("name"),
+                                    itemNameParameter
+                            )
+                    )
+            ).setParameter(itemNameParameter, "value");
+
+            query.setFirstResult(40).setMaxResults(10);
+
+            List<Item> items = query.getResultList();
+
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
             transaction.rollback();

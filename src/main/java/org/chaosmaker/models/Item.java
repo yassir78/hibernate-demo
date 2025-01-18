@@ -1,6 +1,7 @@
 package org.chaosmaker.models;
 
 import jakarta.persistence.*;
+import org.chaosmaker.interceptors.Auditable;
 import org.chaosmaker.listeners.PersistEntityListener;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -27,10 +28,7 @@ When using LazyCollectionOption.EXTRA:
                 }
         )
 })
-@EntityListeners(
-        PersistEntityListener.class
-)
-public class Item {
+public class Item implements Auditable {
     public static final String PROFILE_JOIN_SELLER = "JoinSeller";
     public static final String PROFILE_JOIN_BIDS = "JoinBids";
     @Id

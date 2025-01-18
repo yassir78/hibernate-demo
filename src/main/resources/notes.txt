@@ -1,0 +1,11 @@
+
+JPQL tips :
+
+1- use a from Class => generates a full query
+2- Adding a SELECT clause to a JPQL query requires assignment of an alias to the queried :
+    select i from Item as i or select i from Item i
+3- In case of inhreritence :
+               MainClass
+              /       \
+       SubClass1   SubClass2
+querying MainClass : SELECT o FROM MainClass o, will query both subclasses
